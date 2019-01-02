@@ -1,5 +1,11 @@
 var peepsContainer = document.getElementById("peeps");
 var peeps = new XMLHttpRequest();
+var btn = document.getElementById("btn");
+var logged_in = false;
+
+btn.addEventListener("click", function() {
+  location.href = "./login.html";
+})
 
 peeps.open('GET', 'https://chitter-backend-api.herokuapp.com/peeps');
 peeps.onload = function () {
