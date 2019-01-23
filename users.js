@@ -1,27 +1,55 @@
-const createUser = new XMLHttpRequest();
-const signIn = new XMLHttpRequest();
+let loginForm = document.getElementById('login-form');
+let handleInput = document.getElementById('handle');
+let passwordInput = document.getElementById('password');
+let signupForm = document.getElementById('singup-form');
+let newHandleInput = document.getElementById('newhandle');
+let newPasswordInput = document.getElementById('newpassword');
 
-const loginForm = document.getElementById('login-form');
-const handleInput = document.getElementById('handle');
-const passwordInput = document.getElementById('password');
-const signupForm = document.getElementById('singup-form');
-const newHandleInput = document.getElementById('newhandle');
-const newPasswordInput = document.getElementById('newpassword');
+loginForm.addEventListener('submit', logIn);
+signupForm.addEventListener('submit', signUp);
 
-loginForm.addEventListener('submit', event => {
-  const handle = handleInput.value;
-  const password = passwordInput.value;
+function logIn(){
+  let handle = handleInput.value;
+  let password = passwordInput.value;
+  let url = `https://chitter-backend-api.herokuapp.com/sessions`;
+  let data = {session: {
+    handle: handle,
+    password: password
+    }
+  };
 
-  signIn.open('POST', 'https://chitter-backend-api.herokuapp.com/sessions', true);
-  signIn.setRequestHeader('Content-Type', 'application/json');
-  signIn.send(JSON.stringify({"user": {"handle":`"${handle}"`, "password":`"${password}"`}}));
-});
+  console.log(`log in called upon with data: ${JSON.stringify(data)}`);
 
-signupForm.addEventListener('submit', event => {
-  const newHandle = newHandleInput.value;
-  const newPassword = newPasswordInput.value;
+  fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+  }).then(res => res.json())
+  .then(response => console.log(response))
+  .catch(error => console.error(error))
+}
+
+function signUp(){
+  let newHandle = newHandleInput.value;
+  let newPassword = newPasswordInput.value;
+  let url = `https://chitter-backend-api.herokuapp.com/users`;
+  let data = {session: {
+    handle: newHandle,
+    password: newPassword
+    }
+  };
   
-  createUser.open('POST', 'https://chitter-backend-api.herokuapp.com/users', true);
-  createUser.setRequestHeader('Content-Type', 'application/json');
-  createUser.send(JSON.stringify({"user": {"handle":`"${newHandle}"`, "password":`"${newPassword}"`}}));
-});
+  console.log(`sign up called upon with data: ${JSON.stringify(data)}`);
+
+  fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+  }).then(res => res.json())
+  .then(response => console.log(response))
+  .catch(error => console.error(error))
+}
