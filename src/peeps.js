@@ -1,19 +1,25 @@
-var peepsContainer = document.getElementById("peeps");
-var peeps = new XMLHttpRequest();
-var btn = document.getElementById("login-btn");
-var logged_in = false;
+let peepsContainer = document.getElementById("peeps");
+let peeps = new XMLHttpRequest();
+let loginbtn = document.getElementById("login-btn");
+let postForm = document.getElementById("post-form");
+let newPeep = document.getElementById("new-peep");
 
 window.onload = function () {
   buttonChange();
 }
 
-btn.addEventListener("click", function() {
+loginbtn.addEventListener("click", function() {
   if(sessionStorage.getItem("sessionkey")){
     signOut();
   } else {
     location.href = "./login.html";
   }
 })
+
+postForm.addEventListener('submit', function(event){
+  postPeep();
+  event.preventDefault();
+});
 
 peeps.open('GET', 'https://chitter-backend-api.herokuapp.com/peeps');
 peeps.onload = function () {
@@ -35,14 +41,39 @@ function renderHTML(data) {
 
 function buttonChange(){
   if(sessionStorage.getItem("sessionkey")){
-    btn.innerHTML = "Sign Out";
+    loginbtn.innerHTML = "Sign Out";
   }
   else{
-    btn.innerHTML = "Log In";
+    loginbtn.innerHTML = "Log In";
   }
+}
+
+function postPeep(){
+  let url = `https://chitter-backend-api.herokuapp.com/peeps`;
+  let data = {peep: {
+    user_id: sessionStorage.getItem("id"),
+    body: newPeep.value
+    }
+  };
+
+  console.log("post peep working" + JSON.stringify(data));
+
+  fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token token=${sessionStorage.getItem("sessionkey")}`
+      }
+  }).then(res => res.json())
+  .then(response => {
+    console.log('Success!: ', response);
+    location.reload();
+  })
+  .catch(error => console.error('Error: ', error))
 }
 
 function signOut(){
   sessionStorage.clear();
-  location.reload();
+  loginbtn.innerHTML = "Log In";
 }
