@@ -3,8 +3,16 @@ var peeps = new XMLHttpRequest();
 var btn = document.getElementById("login-btn");
 var logged_in = false;
 
+window.onload = function () {
+  buttonChange();
+}
+
 btn.addEventListener("click", function() {
-  location.href = "./login.html";
+  if(sessionStorage.getItem("sessionkey")){
+    signOut();
+  } else {
+    location.href = "./login.html";
+  }
 })
 
 peeps.open('GET', 'https://chitter-backend-api.herokuapp.com/peeps');
@@ -24,3 +32,17 @@ function renderHTML(data) {
 
   peepsContainer.insertAdjacentHTML('beforeEnd', HTMLstring);
 };
+
+function buttonChange(){
+  if(sessionStorage.getItem("sessionkey")){
+    btn.innerHTML = "Sign Out";
+  }
+  else{
+    btn.innerHTML = "Log In";
+  }
+}
+
+function signOut(){
+  sessionStorage.clear();
+  location.reload();
+}

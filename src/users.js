@@ -38,6 +38,7 @@ function logIn(){
     console.log('Success!: ', response);
     sessionStorage.setItem("id", response.user_id);
     sessionStorage.setItem("sessionkey", response.session_key);
+    location.href = "./index.html";
   })
   .catch(error => console.error('Error: ', error))
 }
