@@ -5,9 +5,6 @@ let signupForm = document.getElementById('singup-form');
 let newHandleInput = document.getElementById('newhandle');
 let newPasswordInput = document.getElementById('newpassword');
 
-var userId = sessionStorage.getItem("id");
-var sessionKey = sessionStorage.getItem("sessionkey");
-
 loginForm.addEventListener('submit', function(event){
   event.preventDefault();
   logIn();
