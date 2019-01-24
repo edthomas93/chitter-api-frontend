@@ -5,8 +5,14 @@ let signupForm = document.getElementById('singup-form');
 let newHandleInput = document.getElementById('newhandle');
 let newPasswordInput = document.getElementById('newpassword');
 
-loginForm.addEventListener('submit', logIn);
-signupForm.addEventListener('submit', signUp);
+loginForm.addEventListener('submit', function(event){
+  event.preventDefault();
+  logIn();
+});
+signupForm.addEventListener('submit', function(event){
+  event.preventDefault();
+  signUp();
+});
 
 function logIn(){
   let handle = handleInput.value;
@@ -18,7 +24,7 @@ function logIn(){
     }
   };
 
-  console.log(`log in called upon with data: ${JSON.stringify(data)}`);
+  // console.log(`log in called upon with data: ${JSON.stringify(data)}`);
 
   fetch(url, {
       method: 'POST',
@@ -31,11 +37,13 @@ function logIn(){
   .catch(error => console.error(error))
 }
 
+
+
 function signUp(){
   let newHandle = newHandleInput.value;
   let newPassword = newPasswordInput.value;
   let url = `https://chitter-backend-api.herokuapp.com/users`;
-  let data = {session: {
+  let data = {user: {
     handle: newHandle,
     password: newPassword
     }

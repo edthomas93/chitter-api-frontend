@@ -1,6 +1,6 @@
 var peepsContainer = document.getElementById("peeps");
 var peeps = new XMLHttpRequest();
-var btn = document.getElementById("btn");
+var btn = document.getElementById("login-btn");
 var logged_in = false;
 
 btn.addEventListener("click", function() {
