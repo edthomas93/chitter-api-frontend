@@ -5,6 +5,9 @@ let signupForm = document.getElementById('singup-form');
 let newHandleInput = document.getElementById('newhandle');
 let newPasswordInput = document.getElementById('newpassword');
 
+var userId = sessionStorage.getItem("id");
+var sessionKey = sessionStorage.getItem("sessionkey");
+
 loginForm.addEventListener('submit', function(event){
   event.preventDefault();
   logIn();
@@ -24,8 +27,6 @@ function logIn(){
     }
   };
 
-  // console.log(`log in called upon with data: ${JSON.stringify(data)}`);
-
   fetch(url, {
       method: 'POST',
       body: JSON.stringify(data),
@@ -33,11 +34,13 @@ function logIn(){
         'Content-Type': 'application/json'
       }
   }).then(res => res.json())
-  .then(response => console.log(response))
-  .catch(error => console.error(error))
+  .then(response => {
+    console.log('Success!: ', response);
+    sessionStorage.setItem("id", response.user_id);
+    sessionStorage.setItem("sessionkey", response.session_key);
+  })
+  .catch(error => console.error('Error: ', error))
 }
-
-
 
 function signUp(){
   let newHandle = newHandleInput.value;
@@ -48,8 +51,6 @@ function signUp(){
     password: newPassword
     }
   };
-  
-  console.log(`sign up called upon with data: ${JSON.stringify(data)}`);
 
   fetch(url, {
       method: 'POST',
