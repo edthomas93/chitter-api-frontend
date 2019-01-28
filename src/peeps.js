@@ -3,6 +3,7 @@ let peeps = new XMLHttpRequest();
 let loginbtn = document.getElementById("login-btn");
 let postForm = document.getElementById("post-form");
 let newPeep = document.getElementById("new-peep");
+let likeButton = document.getElementById("like-btn")
 
 window.onload = function () {
   buttonChange();
@@ -33,7 +34,10 @@ function renderHTML(data) {
   var HTMLstring = "";
 
   for(var i=0; i<data.length; i++) {
-    HTMLstring += `<p> ${data[i].user.handle}: "${data[i].body}" @${data[i].created_at.slice(11, 16)} on ${data[i].created_at.slice(0, 10)}</p>`
+    HTMLstring += `<p> ${data[i].user.handle}: "${data[i].body}" @${data[i].created_at.slice(11, 16)} 
+    on ${data[i].created_at.slice(0, 10)}</p>
+    <p>liked by ${data[i].likes.length} people <button>Like</button> </p>
+    <hr>`
   }
 
   peepsContainer.insertAdjacentHTML('beforeEnd', HTMLstring);
@@ -50,11 +54,7 @@ function buttonChange(){
 
 function postPeep(){
   let url = `https://chitter-backend-api.herokuapp.com/peeps`;
-  let data = {peep: {
-    user_id: sessionStorage.getItem("id"),
-    body: newPeep.value
-    }
-  };
+  let data = {peep: {user_id: sessionStorage.getItem("id"), body: newPeep.value}};
 
   console.log("post peep working" + JSON.stringify(data));
 

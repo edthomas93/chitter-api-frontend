@@ -18,11 +18,7 @@ function logIn(){
   let handle = handleInput.value;
   let password = passwordInput.value;
   let url = `https://chitter-backend-api.herokuapp.com/sessions`;
-  let data = {session: {
-    handle: handle,
-    password: password
-    }
-  };
+  let data = {session: {handle: handle,password: password}};
 
   fetch(url, {
       method: 'POST',
@@ -44,11 +40,7 @@ function signUp(){
   let newHandle = newHandleInput.value;
   let newPassword = newPasswordInput.value;
   let url = `https://chitter-backend-api.herokuapp.com/users`;
-  let data = {user: {
-    handle: newHandle,
-    password: newPassword
-    }
-  };
+  let data = {user: {handle: newHandle, password: newPassword}};
 
   fetch(url, {
       method: 'POST',
