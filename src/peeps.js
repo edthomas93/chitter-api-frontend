@@ -3,7 +3,6 @@ let peeps = new XMLHttpRequest();
 let loginbtn = document.getElementById("login-btn");
 let postForm = document.getElementById("post-form");
 let newPeep = document.getElementById("new-peep");
-let likeButton = document.getElementById("like-btn")
 
 window.onload = function () {
   buttonChange();
@@ -36,7 +35,7 @@ function renderHTML(data) {
   for(var i=0; i<data.length; i++) {
     HTMLstring += `<p> ${data[i].user.handle}: "${data[i].body}" @${data[i].created_at.slice(11, 16)} 
     on ${data[i].created_at.slice(0, 10)}</p>
-    <p>liked by ${data[i].likes.length} people <button>Like</button> </p>
+    <p>liked by ${data[i].likes.length} people <button id="${data[i].id}" onClick="likePost(this.id)">Like</button> </p>
     <hr>`
   }
 
@@ -76,4 +75,8 @@ function postPeep(){
 function signOut(){
   sessionStorage.clear();
   loginbtn.innerHTML = "Log In";
+}
+
+function likePost(postId){
+  console.log(`like button clicked for id ${postId}`)
 }
