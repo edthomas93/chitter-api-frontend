@@ -78,5 +78,15 @@ function signOut(){
 }
 
 function likePost(postId){
-  console.log(`like button clicked for id ${postId}`)
+  let url = `https://chitter-backend-api.herokuapp.com/peeps/${postId}/likes/${sessionStorage.getItem("id")}`;
+
+  fetch(url, {
+      method: 'PUT',
+      headers: {'Authorization': `Token token=${sessionStorage.getItem("sessionkey")}`}
+  }).then(res => res.json())
+  .then(response => {
+    console.log('Success!: ', response);
+    location.reload();
+  })
+  .catch(error => console.error('Error: ', error))
 }
