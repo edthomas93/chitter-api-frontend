@@ -35,7 +35,7 @@ function renderHTML(data) {
   for(var i=0; i<data.length; i++) {
     HTMLstring += `<p> ${data[i].user.handle}: "${data[i].body}" @${data[i].created_at.slice(11, 16)} 
     on ${data[i].created_at.slice(0, 10)}</p>
-    <p>liked by ${data[i].likes.length} people <button id="${data[i].id}" onClick="likePost(this.id)">Like</button> </p>
+    <p>liked by ${data[i].likes.length} people <button id="like${data[i].id}" onClick="likePost(this.id)">Like</button> </p>
     <hr>`
   }
 
@@ -77,16 +77,47 @@ function signOut(){
   loginbtn.innerHTML = "Log In";
 }
 
-function likePost(postId){
-  let url = `https://chitter-backend-api.herokuapp.com/peeps/${postId}/likes/${sessionStorage.getItem("id")}`;
+async function likePost(postId){
+  let id = postId.slice(4);
+  let url = `https://chitter-backend-api.herokuapp.com/peeps/${id}/likes/${sessionStorage.getItem("id")}`;
 
-  fetch(url, {
-      method: 'PUT',
-      headers: {'Authorization': `Token token=${sessionStorage.getItem("sessionkey")}`}
-  }).then(res => res.json())
-  .then(response => {
-    console.log('Success!: ', response);
-    location.reload();
+  let likers = await getLikers(id);
+  console.log(likers);
+  console.log(likers.includes(parseInt(sessionStorage.getItem("id"), 10)));
+
+  if(likers.includes(parseInt(sessionStorage.getItem("id"), 10))){
+    fetch(url, {
+        method: 'DELETE',
+        headers: {'Authorization': `Token token=${sessionStorage.getItem("sessionkey")}`}
+    })
+    .then(response => {
+      console.log('Success!: ', response);
+      location.reload();
+    })
+    .catch(error => console.error('Error: ', error))
+  } else{
+    fetch(url, {
+        method: 'PUT',
+        headers: {'Authorization': `Token token=${sessionStorage.getItem("sessionkey")}`}
+    }).then(res => res.json())
+    .then(response => {
+      console.log('Success!: ', response);
+      location.reload();
+    })
+    .catch(error => console.error('Error: ', error))
+  }
+}
+
+function getLikers(id){
+  let peepurl = `https://chitter-backend-api.herokuapp.com/peeps/${id}`
+  let likedBy = [];
+  
+  return fetch(peepurl)
+    .then(res => res.json())
+    .then(data => {
+      for(var i=0; i<data.likes.length; i++) {
+        likedBy.push(data.likes[i].user.id);
+      }
+      return likedBy;
   })
-  .catch(error => console.error('Error: ', error))
 }
