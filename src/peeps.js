@@ -29,13 +29,21 @@ peeps.onload = function () {
 
 peeps.send();
 
-function renderHTML(data) {
+async function renderHTML(data) {
   var HTMLstring = "";
 
   for(var i=0; i<data.length; i++) {
-    HTMLstring += `<p> ${data[i].user.handle}: "${data[i].body}" @${data[i].created_at.slice(11, 16)} 
+    let likers = await getLikers(data[i].id);
+    
+    if(likers.includes(parseInt(sessionStorage.getItem("id"), 10))){
+      likeButtonText = 'Unlike';
+    } else {
+      likeButtonText = 'Like';
+    }
+
+    HTMLstring += `<p class="bold"> ${data[i].user.handle}: </p> <p class="italics">"${data[i].body}"</p><p> @${data[i].created_at.slice(11, 16)} 
     on ${data[i].created_at.slice(0, 10)}</p>
-    <p>liked by ${data[i].likes.length} people <button id="like${data[i].id}" onClick="likePost(this.id)">Like</button> </p>
+    <br><p>liked by ${data[i].likes.length} people <button id="like${data[i].id}" onClick="likePost(this.id)">${likeButtonText}</button> </p></br>
     <hr>`
   }
 
@@ -54,8 +62,6 @@ function buttonChange(){
 function postPeep(){
   let url = `https://chitter-backend-api.herokuapp.com/peeps`;
   let data = {peep: {user_id: sessionStorage.getItem("id"), body: newPeep.value}};
-
-  console.log("post peep working" + JSON.stringify(data));
 
   fetch(url, {
       method: 'POST',
@@ -82,8 +88,8 @@ async function likePost(postId){
   let url = `https://chitter-backend-api.herokuapp.com/peeps/${id}/likes/${sessionStorage.getItem("id")}`;
 
   let likers = await getLikers(id);
-  console.log(likers);
-  console.log(likers.includes(parseInt(sessionStorage.getItem("id"), 10)));
+
+  //parseInt converts string into integer
 
   if(likers.includes(parseInt(sessionStorage.getItem("id"), 10))){
     fetch(url, {

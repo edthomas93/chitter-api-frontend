@@ -3,14 +3,18 @@ html, body {
   height: 100%;
   font-family: Tahoma, Geneva, sans-serif;
   background-color: rgb(182, 216, 255);
-  text-align: center;
+  text-align: left;
 }
 
 p {
   font-family: "Times New Roman", Times, serif;
-  text-align: left;
+  display: inline;
 }
 
-form, h2 {
-  text-align: left
+p.italics {
+  font-style: italic;
+}
+
+p.bold {
+  font-weight: bold;
 }
