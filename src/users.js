@@ -49,6 +49,10 @@ function signUp() {
       'Content-Type': 'application/json',
     },
   }).then(res => res.json())
-    .then(response => console.log(response))
+    .then((response) => {
+      console.log(response);
+      newHandleInput.value = '';
+      newPasswordInput.value = '';
+    })
     .catch(error => console.error(error));
 }
