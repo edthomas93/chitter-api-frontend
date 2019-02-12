@@ -1,54 +1,54 @@
-let loginForm = document.getElementById('login-form');
-let handleInput = document.getElementById('handle');
-let passwordInput = document.getElementById('password');
-let signupForm = document.getElementById('singup-form');
-let newHandleInput = document.getElementById('newhandle');
-let newPasswordInput = document.getElementById('newpassword');
+const loginForm = document.getElementById('login-form');
+const handleInput = document.getElementById('handle');
+const passwordInput = document.getElementById('password');
+const signupForm = document.getElementById('singup-form');
+const newHandleInput = document.getElementById('newhandle');
+const newPasswordInput = document.getElementById('newpassword');
 
-loginForm.addEventListener('submit', function(event){
+loginForm.addEventListener('submit', function (event) {
   event.preventDefault();
   logIn();
 });
-signupForm.addEventListener('submit', function(event){
+signupForm.addEventListener('submit', function (event) {
   event.preventDefault();
   signUp();
 });
 
-function logIn(){
-  let handle = handleInput.value;
-  let password = passwordInput.value;
-  let url = `https://chitter-backend-api.herokuapp.com/sessions`;
-  let data = {session: {handle: handle,password: password}};
+function logIn() {
+  const handle = handleInput.value;
+  const password = passwordInput.value;
+  const url = 'https://chitter-backend-api.herokuapp.com/sessions';
+  const data = { session: { handle: handle, password: password } };
 
   fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   }).then(res => res.json())
-  .then(response => {
-    console.log('Success!: ', response);
-    sessionStorage.setItem("id", response.user_id);
-    sessionStorage.setItem("sessionkey", response.session_key);
-    location.href = "./index.html";
-  })
-  .catch(error => console.error('Error: ', error))
+    .then((response) => {
+      console.log('Success!: ', response);
+      sessionStorage.setItem('id', response.user_id);
+      sessionStorage.setItem('sessionkey', response.session_key);
+      location.href = './index.html';
+    })
+    .catch(error => console.error('Error: ', error));
 }
 
-function signUp(){
-  let newHandle = newHandleInput.value;
-  let newPassword = newPasswordInput.value;
-  let url = `https://chitter-backend-api.herokuapp.com/users`;
-  let data = {user: {handle: newHandle, password: newPassword}};
+function signUp() {
+  const newHandle = newHandleInput.value;
+  const newPassword = newPasswordInput.value;
+  const url = 'https://chitter-backend-api.herokuapp.com/users';
+  const data = { user: { handle: newHandle, password: newPassword } };
 
   fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   }).then(res => res.json())
-  .then(response => console.log(response))
-  .catch(error => console.error(error))
+    .then(response => console.log(response))
+    .catch(error => console.error(error));
 }

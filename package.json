@@ -1,0 +1,30 @@
+{
+  "name": "chitter-api-frontend",
+  "version": "1.0.0",
+  "description": "The scenario is similar to the [Chitter Challenge](https://github.com/makersacademy/chitter-challenge), except someone has already built a backend API for you and hosted it on Heroku.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/edthomas93/chitter-api-frontend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/edthomas93/chitter-api-frontend/issues"
+  },
+  "homepage": "https://github.com/edthomas93/chitter-api-frontend#readme",
+  "devDependencies": {
+    "eslint": "^5.13.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0"
+  },
+  "dependencies": {
+    "xmlhttprequest": "^1.8.0"
+  }
+}
