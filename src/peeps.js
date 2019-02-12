@@ -4,23 +4,6 @@ const loginbtn = document.getElementById('login-btn');
 const postForm = document.getElementById('post-form');
 const newPeep = document.getElementById('new-peep');
 
-window.onload = function () {
-  buttonChange();
-}
-
-loginbtn.addEventListener('click', function () {
-  if (sessionStorage.getItem('sessionkey')) {
-    signOut();
-  } else {
-    location.href = './login.html';
-  }
-});
-
-postForm.addEventListener('submit', function (event) {
-  postPeep();
-  event.preventDefault();
-});
-
 peeps.open('GET', 'https://chitter-backend-api.herokuapp.com/peeps');
 peeps.onload = function () {
   var data = JSON.parse(peeps.responseText);
@@ -73,7 +56,7 @@ function postPeep() {
   }).then(res => res.json())
     .then((response) => {
       console.log('Success!: ', response);
-      location.reload();
+      window.location.reload();
     })
     .catch(error => console.error('Error: ', error));
 }
@@ -81,6 +64,20 @@ function postPeep() {
 function signOut() {
   sessionStorage.clear();
   loginbtn.innerHTML = 'Log In';
+}
+
+function getLikers(id) {
+  const peepurl = `https://chitter-backend-api.herokuapp.com/peeps/${id}`;
+  const likedBy = [];
+
+  return fetch(peepurl)
+    .then(res => res.json())
+    .then((data) => {
+      for (let i = 0; i < data.likes.length; i++) {
+        likedBy.push(data.likes[i].user.id);
+      }
+      return likedBy;
+    });
 }
 
 async function likePost(postId) {
@@ -98,7 +95,7 @@ async function likePost(postId) {
     })
       .then((response) => {
         console.log('Success!: ', response);
-        location.reload();
+        window.location.reload();
       })
       .catch(error => console.error('Error: ', error));
   } else {
@@ -108,22 +105,25 @@ async function likePost(postId) {
     }).then(res => res.json())
       .then((response) => {
         console.log('Success!: ', response);
-        location.reload();
+        window.location.reload();
       })
       .catch(error => console.error('Error: ', error));
   }
 }
 
-function getLikers(id) {
-  const peepurl = `https://chitter-backend-api.herokuapp.com/peeps/${id}`;
-  const likedBy = [];
-
-  return fetch(peepurl)
-    .then(res => res.json())
-    .then((data) => {
-      for (let i = 0; i < data.likes.length; i++) {
-        likedBy.push(data.likes[i].user.id);
-      }
-      return likedBy;
-    });
+window.onload = function () {
+  buttonChange();
 }
+
+loginbtn.addEventListener('click', function () {
+  if (sessionStorage.getItem('sessionkey')) {
+    signOut();
+  } else {
+    location.href = './login.html';
+  }
+});
+
+postForm.addEventListener('submit', function (event) {
+  postPeep();
+  event.preventDefault();
+});

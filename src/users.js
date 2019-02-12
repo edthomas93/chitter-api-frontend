@@ -5,20 +5,11 @@ const signupForm = document.getElementById('singup-form');
 const newHandleInput = document.getElementById('newhandle');
 const newPasswordInput = document.getElementById('newpassword');
 
-loginForm.addEventListener('submit', function (event) {
-  event.preventDefault();
-  logIn();
-});
-signupForm.addEventListener('submit', function (event) {
-  event.preventDefault();
-  signUp();
-});
-
 function logIn() {
-  const handle = handleInput.value;
-  const password = passwordInput.value;
+  const userHandle = handleInput.value;
+  const userPassword = passwordInput.value;
   const url = 'https://chitter-backend-api.herokuapp.com/sessions';
-  const data = { session: { handle: handle, password: password } };
+  const data = { session: { handle: userHandle, password: userPassword } };
 
   fetch(url, {
     method: 'POST',
@@ -31,7 +22,7 @@ function logIn() {
       console.log('Success!: ', response);
       sessionStorage.setItem('id', response.user_id);
       sessionStorage.setItem('sessionkey', response.session_key);
-      location.href = './index.html';
+      window.location.href = './index.html';
     })
     .catch(error => console.error('Error: ', error));
 }
@@ -56,3 +47,13 @@ function signUp() {
     })
     .catch(error => console.error(error));
 }
+
+loginForm.addEventListener('submit', function (event) {
+  event.preventDefault();
+  logIn();
+});
+
+signupForm.addEventListener('submit', function (event) {
+  event.preventDefault();
+  signUp();
+});
