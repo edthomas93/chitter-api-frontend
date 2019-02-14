@@ -52,7 +52,7 @@ function renderHTML(data) {
   for (let i = 0; i < data.length; i += 1) {
     HTMLstring += `<p class="bold"> ${data[i].user.handle}: </p> <p class="italics">"${data[i].body}"</p><p> @${data[i].created_at.slice(11, 16)} 
     on ${data[i].created_at.slice(0, 10)}</p>
-    <br><p>liked by ${data[i].likes.length} people <button id="like${data[i].id}" onClick="likePost(this.id)">Like</button> </p></br>
+    <br><p>liked by ${data[i].likes.length} people <button id="like${data[i].id}" onClick="clickLike(this.id)">Like</button> </p></br>
     <hr>`;
   }
 
@@ -62,8 +62,7 @@ function renderHTML(data) {
 function buttonChange() {
   if (sessionStorage.getItem('sessionkey')) {
     loginbtn.innerHTML = 'Sign Out';
-  }
-  else {
+  } else {
     loginbtn.innerHTML = 'Log In';
   }
 }
@@ -101,33 +100,40 @@ function getLikers(id) {
     });
 }
 
-async function likePost(postId) {
+async function clickLike(postId) {
   const id = postId.slice(4);
   const url = `https://chitter-backend-api.herokuapp.com/peeps/${id}/likes/${sessionStorage.getItem("id")}`;
 
   const likers = await getLikers(id);
+  const parsedLikers = parseInt(sessionStorage.getItem('id'), 10); // parseInt converts string into integer
 
-  //  parseInt converts string into integer
-
-  if (likers.includes(parseInt(sessionStorage.getItem('id'), 10))) {
-    fetch(url, {
-      method: 'DELETE',
-      headers: { Authorization: `Token token=${sessionStorage.getItem('sessionkey')}` },
-    })
-      .then((response) => {
-        console.log('Success!: ', response);
-        window.location.reload();
-      })
-      .catch(error => console.error('Error: ', error));
+  if (likers.includes(parsedLikers)) {
+    unlikePost(url);
   } else {
-    fetch(url, {
-      method: 'PUT',
-      headers: { Authorization: `Token token=${sessionStorage.getItem('sessionkey')}` },
-    }).then(res => res.json())
-      .then((response) => {
-        console.log('Success!: ', response);
-        window.location.reload();
-      })
-      .catch(error => console.error('Error: ', error));
+    likePost(url);
   }
+}
+
+function likePost(url) {
+  fetch(url, {
+    method: 'PUT',
+    headers: { Authorization: `Token token=${sessionStorage.getItem('sessionkey')}` },
+  }).then(res => res.json())
+    .then((response) => {
+      console.log('Success!: ', response);
+      window.location.reload();
+    })
+    .catch(error => console.error('Error: ', error));
+}
+
+function unlikePost(url) {
+  fetch(url, {
+    method: 'DELETE',
+    headers: { Authorization: `Token token=${sessionStorage.getItem('sessionkey')}` },
+  })
+    .then((response) => {
+      console.log('Success!: ', response);
+      window.location.reload();
+    })
+    .catch(error => console.error('Error: ', error));
 }
