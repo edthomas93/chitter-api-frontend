@@ -27,7 +27,7 @@ postForm.addEventListener('submit', (event) => {
 
 function signOut() {
   sessionStorage.clear();
-  loginbtn.innerHTML = 'Log In';
+  window.location.reload();
 }
 
 async function renderPeeps() {
@@ -49,6 +49,10 @@ function getPeepsData() {
 function renderHTML(data) {
   let HTMLstring = '';
   let type = '';
+
+  if (sessionStorage.getItem('sessionkey')) {
+    HTMLstring += `Posting as ${sessionStorage.getItem('username')}<hr>`;
+  }
 
   for (let i = 0; i < data.length; i += 1) {
     const likeButtonText = returnLikeButtonText(data[i]);

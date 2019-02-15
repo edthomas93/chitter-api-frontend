@@ -20,6 +20,7 @@ function logIn() {
   }).then(res => res.json())
     .then((response) => {
       if (response.user_id) {
+        sessionStorage.setItem('username', handleInput.value);
         sessionStorage.setItem('id', response.user_id);
         sessionStorage.setItem('sessionkey', response.session_key);
         window.location.href = './index.html';
