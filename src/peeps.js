@@ -50,13 +50,28 @@ function renderHTML(data) {
   let HTMLstring = '';
 
   for (let i = 0; i < data.length; i += 1) {
+    const likeButtonText = userLiked(data[i]);
+
     HTMLstring += `<p class="bold"> ${data[i].user.handle}: </p> <p class="italics">"${data[i].body}"</p><p> @${data[i].created_at.slice(11, 16)} 
     on ${data[i].created_at.slice(0, 10)}</p>
-    <br><p>liked by ${data[i].likes.length} people <button id="like${data[i].id}" onClick="clickLike(this.id)">Like</button> </p></br>
+    <br><p>liked by ${data[i].likes.length} people <button id="like${data[i].id}" onClick="clickLike(this.id)">${likeButtonText}</button> </p></br>
     <hr>`;
   }
 
   peepsContainer.insertAdjacentHTML('beforeEnd', HTMLstring);
+}
+
+function userLiked(data) {
+  const likedBy = [];
+  for (let i = 0; i < data.likes.length; i += 1) {
+    likedBy.push(data.likes[i].user.id);
+  }
+
+  const userId = parseInt(sessionStorage.getItem('id'), 10); // parseInt converts string into integer
+  if (likedBy.includes(userId)) {
+    return 'Unlike';
+  }
+  return 'Like';
 }
 
 function buttonChange() {
@@ -86,28 +101,12 @@ function postPeep() {
     .catch(error => console.error('Error: ', error));
 }
 
-function getLikers(id) {
-  const peepurl = `https://chitter-backend-api.herokuapp.com/peeps/${id}`;
-  const likedBy = [];
-
-  return fetch(peepurl)
-    .then(res => res.json())
-    .then((data) => {
-      for (let i = 0; i < data.likes.length; i += 1) {
-        likedBy.push(data.likes[i].user.id);
-      }
-      return likedBy;
-    });
-}
-
 async function clickLike(postId) {
   const id = postId.slice(4);
   const url = `https://chitter-backend-api.herokuapp.com/peeps/${id}/likes/${sessionStorage.getItem("id")}`;
+  const likeButton = document.getElementById(postId);
 
-  const likers = await getLikers(id);
-  const parsedLikers = parseInt(sessionStorage.getItem('id'), 10); // parseInt converts string into integer
-
-  if (likers.includes(parsedLikers)) {
+  if (likeButton.innerHTML === 'Unlike') {
     unlikePost(url);
   } else {
     likePost(url);
