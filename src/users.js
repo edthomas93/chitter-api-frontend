@@ -19,12 +19,20 @@ function logIn() {
     },
   }).then(res => res.json())
     .then((response) => {
-      console.log('Success!: ', response);
-      sessionStorage.setItem('id', response.user_id);
-      sessionStorage.setItem('sessionkey', response.session_key);
-      window.location.href = './index.html';
+      if (response.user_id) {
+        sessionStorage.setItem('id', response.user_id);
+        sessionStorage.setItem('sessionkey', response.session_key);
+        window.location.href = './index.html';
+      } else {
+        alert(`Log in failed, please re-enter credentials`);
+        clearFields();
+      }
     })
-    .catch(error => console.error('Error: ', error));
+    .catch((error) => {
+      console.log('Error: ', error);
+      clearFields();
+      alert('Log in failed, username does not exist');
+    });
 }
 
 function signUp() {
@@ -39,13 +47,22 @@ function signUp() {
     headers: {
       'Content-Type': 'application/json',
     },
-  }).then(res => res.json())
-    .then((response) => {
-      console.log(response);
-      newHandleInput.value = '';
-      newPasswordInput.value = '';
-    })
-    .catch(error => console.error(error));
+  }).then((res) => {
+    if (res.status === 422) {
+      alert('Creation failed, username already taken');
+    } else {
+      alert(`Account created, username ${newHandleInput.value}`);
+    }
+    clearFields();
+  })
+    .catch(error => console.log(error));
+}
+
+function clearFields() {
+  newHandleInput.value = '';
+  newPasswordInput.value = '';
+  handleInput.value = '';
+  passwordInput.value = '';
 }
 
 loginForm.addEventListener('submit', function (event) {
