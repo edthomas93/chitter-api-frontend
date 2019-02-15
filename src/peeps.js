@@ -48,12 +48,19 @@ function getPeepsData() {
 
 function renderHTML(data) {
   let HTMLstring = '';
+  let type = '';
 
   for (let i = 0; i < data.length; i += 1) {
-    const likeButtonText = userLiked(data[i]);
+    const likeButtonText = returnLikeButtonText(data[i]);
+
+    if (data[i].user.id === parseInt(sessionStorage.getItem('id'), 10)) {
+      type = '';
+    } else {
+      type = 'hidden';
+    }
 
     HTMLstring += `<p class="bold"> ${data[i].user.handle}: </p> <p class="italics">"${data[i].body}"</p><p> @${data[i].created_at.slice(11, 16)} 
-    on ${data[i].created_at.slice(0, 10)}</p>
+    on ${data[i].created_at.slice(0, 10)}</p> <button ${type} id="delete${data[i].id}" onClick="deletePeep(this.id)">Delete Peep?</button>
     <br><p>liked by ${data[i].likes.length} people <button id="like${data[i].id}" onClick="clickLike(this.id)">${likeButtonText}</button> </p></br>
     <hr>`;
   }
@@ -61,7 +68,7 @@ function renderHTML(data) {
   peepsContainer.insertAdjacentHTML('beforeEnd', HTMLstring);
 }
 
-function userLiked(data) {
+function returnLikeButtonText(data) {
   const likedBy = [];
   for (let i = 0; i < data.likes.length; i += 1) {
     likedBy.push(data.likes[i].user.id);
@@ -98,10 +105,10 @@ function postPeep() {
       console.log('Success!: ', response);
       window.location.reload();
     })
-    .catch(error => console.error('Error: ', error));
+    .catch(error => console.log('Error: ', error));
 }
 
-async function clickLike(postId) {
+function clickLike(postId) {
   const id = postId.slice(4);
   const url = `https://chitter-backend-api.herokuapp.com/peeps/${id}/likes/${sessionStorage.getItem("id")}`;
   const likeButton = document.getElementById(postId);
@@ -113,6 +120,21 @@ async function clickLike(postId) {
   }
 }
 
+function deletePeep(postId) {
+  const id = postId.slice(6);
+  const url = `https://chitter-backend-api.herokuapp.com/peeps/${id}`;
+
+  fetch(url, {
+    method: 'DELETE',
+    headers: { Authorization: `Token token=${sessionStorage.getItem('sessionkey')}` },
+  })
+    .then((response) => {
+      console.log('Success!: ', response);
+      window.location.reload();
+    })
+    .catch(error => console.log('Error: ', error));
+}
+
 function likePost(url) {
   fetch(url, {
     method: 'PUT',
@@ -122,7 +144,7 @@ function likePost(url) {
       console.log('Success!: ', response);
       window.location.reload();
     })
-    .catch(error => console.error('Error: ', error));
+    .catch(error => console.log('Error: ', error));
 }
 
 function unlikePost(url) {
@@ -134,5 +156,5 @@ function unlikePost(url) {
       console.log('Success!: ', response);
       window.location.reload();
     })
-    .catch(error => console.error('Error: ', error));
+    .catch(error => console.log('Error: ', error));
 }
