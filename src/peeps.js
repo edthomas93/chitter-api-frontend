@@ -52,7 +52,7 @@ function renderHTML(data) {
   let hideLikeBtnText = '';
 
   if (sessionStorage.getItem('sessionkey')) {
-    HTMLstring += `Posting as ${sessionStorage.getItem('username')}<hr>`;
+    HTMLstring += `Posting as: <p class="bold">${sessionStorage.getItem('username')}</p><hr>`;
   } else {
     postForm.style.display = 'none';
   }
@@ -60,7 +60,9 @@ function renderHTML(data) {
   for (let i = 0; i < data.length; i += 1) {
     const likeButtonText = returnLikeButtonText(data[i]);
 
-    if (data[i].user.id !== parseInt(sessionStorage.getItem('id'), 10)) {
+    if (data[i].user.id === parseInt(sessionStorage.getItem('id'), 10)) {
+      hideDeleteBtnText = '';
+    } else {
       hideDeleteBtnText = 'hidden';
     }
 
@@ -69,7 +71,7 @@ function renderHTML(data) {
     }
 
     HTMLstring += `<p class="bold"> ${data[i].user.handle}: </p> <p class="italics">"${data[i].body}"</p><p> @${data[i].created_at.slice(11, 16)} 
-    on ${data[i].created_at.slice(0, 10)}</p> <button ${hideDeleteBtnText} id="delete${data[i].id}" onClick="deletePeep(this.id)">Delete Peep?</button>
+    on ${data[i].created_at.slice(0, 10)}</p> <button ${hideDeleteBtnText} class="delete-btn" id="delete${data[i].id}" onClick="deletePeep(this.id)">Delete?</button>
     <br><p>liked by ${data[i].likes.length} people <button ${hideLikeBtnText} id="like${data[i].id}" onClick="clickLike(this.id)">${likeButtonText}</button> </p></br>
     <hr>`;
   }

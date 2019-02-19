@@ -1,13 +1,31 @@
+@import url('https://fonts.googleapis.com/css?family=Permanent+Marker|Nunito');
+
 html, body {
-  width: 100%;
-  height: 100%;
-  font-family: Tahoma, Geneva, sans-serif;
+  width: 95%;
+  height: 95%;
+  font-family: 'Nunito', sans-serif;
   background-color: rgb(182, 216, 255);
   text-align: left;
+  padding: 2.5%;
+}
+
+h1 {
+  margin: 0;
+  text-align: center;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 60px;
+  color: white;
+}
+
+h2 {
+  margin: 0;
+  border: 0;
+  font-family: 'Permanent Marker', cursive;
+  font-size: 30px;
+  color: white;
 }
 
 p {
-  font-family: "Times New Roman", Times, serif;
   display: inline;
 }
 
@@ -16,5 +34,31 @@ p.italics {
 }
 
 p.bold {
-  font-weight: bold;
+  font-weight: bolder;
+}
+
+button {
+  background-color: rgb(40, 83, 224);
+  color: white;
+  padding: 3px 10px;
+  text-align: center;
+  border-style: outset;
+}
+
+#login-btn {
+  float: right;
+}
+
+button.delete-btn {
+  float: right;
+  background-color: red;
+}
+
+input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
