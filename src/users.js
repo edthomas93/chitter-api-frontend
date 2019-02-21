@@ -59,8 +59,8 @@ function signUp() {
       alert('Creation failed, username already taken');
     } else {
       alert(`Account created, username ${newHandleInput.value}`);
+      logIn(newHandle, newPassword);
     }
-    logIn(newHandle, newPassword);
     clearFields();
   })
     .catch(error => console.log(error));
